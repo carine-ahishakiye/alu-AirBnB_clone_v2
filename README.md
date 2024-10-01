@@ -1,123 +1,72 @@
-<center> <h1>HBNB - The Console</h1> </center>
+# AirBnB Clone - MySQL
 
-This repository contains  project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+## Project Overview
 
-<center> <h2>General Use</h2> </center>
+This project is part of the **AirBnB clone** series, specifically focusing on the integration of **MySQL** and transitioning from file storage to a relational database storage system using **SQLAlchemy**.
 
-1. First clone this repository.
+The project was developed in collaboration between **David Tuyishime Rubagumya** and **Carine Ahishakiye YIBUKABAYO** as part of our software engineering journey.
 
-3. Once the repository is cloned locate the "console.py" file and run it as follows:
-```
-/AirBnB_clone$ ./console.py
-```
-4. When this command is run the following prompt should appear:
-```
-(hbnb)
-```
-5. This prompt designates you are in the "HBnB" console. There are a variety of commands available within the console program.
+## Features
 
-##### Commands
-    * create - Creates an instance based on given class
+- Unit testing for all major components.
+- Environment variable management for better configuration flexibility.
+- MySQL integration using SQLAlchemy for database operations.
+- Two types of storage engines: FileStorage and DBStorage.
+- Command interpreter integrated with MySQL storage.
+- Python scripting, SQL queries, and database interaction.
 
-    * destroy - Destroys an object based on class and UUID
+## Concepts Covered
 
-    * show - Shows an object based on class and UUID
+### Python
 
-    * all - Shows all objects the program has access to, or all objects of a given class
+- Usage of `*args` and `**kwargs` to manage arguments in functions.
+- Named arguments in Python functions.
+- Python classes mapped to MySQL tables using SQLAlchemy ORM.
+- Handling two different storage engines using the same codebase.
+- Proper documentation for modules, classes, and functions.
 
-    * update - Updates existing attributes an object based on class name and UUID
+### MySQL
 
-    * quit - Exits the program (EOF will as well)
+- Creating and managing a MySQL database.
+- User and privilege management in MySQL.
+- Querying a MySQL database using SQLAlchemy.
+- Working with environment variables for database configuration.
 
+## Environment Variables
 
-##### Alternative Syntax
-Users are able to issue a number of console command using an alternative syntax:
+You will need to configure the following environment variables to run the project correctly:
 
-	Usage: <class_name>.<command>([<id>[name_arg value_arg]|[kwargs]])
-Advanced syntax is implemented for the following commands: 
+- `HBNB_ENV`: Running environment (either “dev” or “test”).
+- `HBNB_MYSQL_USER`: Username for MySQL.
+- `HBNB_MYSQL_PWD`: Password for MySQL.
+- `HBNB_MYSQL_HOST`: MySQL hostname.
+- `HBNB_MYSQL_DB`: MySQL database name.
+- `HBNB_TYPE_STORAGE`: Type of storage, either “file” or “db”.
 
-    * all - Shows all objects the program has access to, or all objects of a given class
+## Requirements
 
-	* count - Return number of object instances by class
+- Python 3.8.5
+- MySQL 8.0
+- SQLAlchemy version 1.4.x
+- Ubuntu 20.04 LTS
 
-    * show - Shows an object based on class and UUID
+### Python Scripts
 
-	* destroy - Destroys an object based on class and UUID
+- Files must be executable and conform to **pycodestyle** (version 2.7.\*).
+- Ensure proper documentation for each module, class, and function.
+- Python scripts must start with `#!/usr/bin/python3`.
 
-    * update - Updates existing attributes an object based on class name and UUID
+### SQL Scripts
 
-<br>
-<br>
-<center> <h2>Examples</h2> </center>
-<h3>Primary Command Syntax</h3>
+- SQL files should start with comments explaining the task.
+- All SQL keywords should be uppercase (e.g., SELECT, WHERE).
+- Ensure SQL files are executable on MySQL 8.0.
 
-###### Example 0: Create an object
-Usage: create <class_name>
-```
-(hbnb) create BaseModel
-```
-```
-(hbnb) create BaseModel
-3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb)                   
-```
-###### Example 1: Show an object
-Usage: show <class_name> <_id>
+## Testing
 
-```
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-[BaseModel] (3aa5babc-efb6-4041-bfe9-3cc9727588f8) {'id': '3aa5babc-efb6-4041-bfe9-3cc9727588f8', 'created_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96959), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96971)}
-(hbnb)  
-```
-###### Example 2: Destroy an object
-Usage: destroy <class_name> <_id>
-```
-(hbnb) destroy BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-** no instance found **
-(hbnb)   
-```
-###### Example 3: Update an object
-Usage: update <class_name> <_id>
-```
-(hbnb) update BaseModel b405fc64-9724-498f-b405-e4071c3d857f first_name "person"
-(hbnb) show BaseModel b405fc64-9724-498f-b405-e4071c3d857f
-[BaseModel] (b405fc64-9724-498f-b405-e4071c3d857f) {'id': 'b405fc64-9724-498f-b405-e4071c3d857f', 'created_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729889), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729907), 'first_name': 'person'}
-(hbnb)
-```
-<h3>Alternative Syntax</h3>
+- We use the `unittest` module for testing the entire project.
+- Tests are located in the `tests/` folder.
+- To run all tests, use the command:
 
-###### Example 0: Show all User objects
-Usage: <class_name>.all()
-```
-(hbnb) User.all()
-["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
-```
-
-###### Example 1: Destroy a User
-Usage: <class_name>.destroy(<_id>)
-```
-(hbnb) User.destroy("99f45908-1d17-46d1-9dd2-b7571128115b")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
-```
-###### Example 2: Update User (by attribute)
-Usage: <class_name>.update(<_id>, <attribute_name>, <attribute_value>)
-```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", name "Todd the Toad")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'name': 'Todd the Toad', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
-```
-###### Example 3: Update User (by dictionary)
-Usage: <class_name>.update(<_id>, <dictionary>)
-```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", {'name': 'Fred the Frog', 'age': 9})
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
-```
-<br>
+  ```bash
+  python3 -m unittest discover tests
