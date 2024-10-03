@@ -37,4 +37,3 @@ sudo systemctl restart nginx
 
 # Exit successfully
 exit 0
-
