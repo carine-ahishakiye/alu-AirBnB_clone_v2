@@ -1,9 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Fabric script that distributes an archive to your web servers"""
 from fabric.api import env, put, run
 from os.path import exists
 
-env.hosts = ["18.232.152.167", "3.92.4.178"]
+env.hosts = ["3.92.4.178", "18.232.152.167"]
 env.user = "ubuntu"
 env.key = "~/.ssh/id_rsa"
 
