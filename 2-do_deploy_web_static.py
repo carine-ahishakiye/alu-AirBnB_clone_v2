@@ -1,58 +1,33 @@
-#!/usr/bin/python3
-# Fabfile to distribute an archive to a web server.
-import os
+#!/usr/bin/python
+"""Fabric script that distributes an archive to your web servers"""
 from fabric.api import env, put, run
+from os.path import exists
 
-env.hosts = ["104.196.168.90", "35.196.46.172"]
+env.hosts = ["18.232.152.167", "3.92.4.178"]
+env.user = "ubuntu"
+env.key = "~/.ssh/id_rsa"
 
 
 def do_deploy(archive_path):
-    """
-    Distributes an archive to a web server.
-
-    Args:
-        archive_path (str): The path of the archive to distribute.
-
-    Returns:
-        bool: False if the file doesn't exist or an error occurs, True otherwise.
-    """
-    if not os.path.isfile(archive_path):
+    """Function to distribute an archive to your web servers"""
+    if not exists(archive_path):
+        return False
+    try:
+        file_name = archive_path.split("/")[-1]
+        name = file_name.split(".")[0]
+        path_name = "/data/web_static/releases/" + name
+        put(archive_path, "/tmp/")
+        run("mkdir -p {}/".format(path_name))
+        run('tar -xzf /tmp/{} -C {}/'.format(file_name, path_name))
+        run("rm /tmp/{}".format(file_name))
+        run("mv {}/web_static/* {}".format(path_name, path_name))
+        run("rm -rf {}/web_static".format(path_name))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}/ /data/web_static/current'.format(path_name))
+        return True
+    except Exception:
         return False
 
-    file_name = archive_path.split("/")[-1]
-    base_name = file_name.split(".")[0]
-    release_path = f"/data/web_static/releases/{base_name}"
-
-    # Upload the archive to /tmp/ directory on the web server
-    if put(archive_path, f"/tmp/{file_name}").failed:
-        return False
-
-    # Create the release directory
-    if run(f"rm -rf {release_path}/").failed:
-        return False
-    if run(f"mkdir -p {release_path}/").failed:
-        return False
-
-    # Extract the archive to the release directory
-    if run(f"tar -xzf /tmp/{file_name} -C {release_path}/").failed:
-        return False
-
-    # Delete the archive from the /tmp/ directory
-    if run(f"rm /tmp/{file_name}").failed:
-        return False
-
-    # Move contents of web_static to the release directory
-    if run(f"mv {release_path}/web_static/* {release_path}/").failed:
-        return False
-
-    # Remove the now empty web_static folder
-    if run(f"rm -rf {release_path}/web_static").failed:
-        return False
-
-    # Delete the current symbolic link and create a new one
-    if run("rm -rf /data/web_static/current").failed:
-        return False
-    if run(f"ln -s {release_path}/ /data/web_static/current").failed:
-        return False
-
-    return True
+# Run the script like this:
+# $ fab -f 2-do_deploy_web_static.py
+# do_deploy:archive_path=versions/file_name.tgz
