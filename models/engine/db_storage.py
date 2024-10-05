@@ -3,6 +3,7 @@
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import Base
 from models.state import State
 from models.city import City
@@ -52,6 +53,35 @@ class DBStorage:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dic[key] = elem
         return (dic)
+
+    def new(self, obj):
+        """add a new element in the table
+        """
+        self.__session.add(obj)
+
+    def save(self):
+        """save changes
+        """
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """delete an element in the table
+        """
+        if obj:
+            self.session.delete(obj)
+
+    def reload(self):
+        """configuration
+        """
+        Base.metadata.create_all(self.__engine)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
+
+    def close(self):
+        """ calls remove()
+        """
+        self.__session.close()
 
     def new(self, obj):
         """add a new element in the table

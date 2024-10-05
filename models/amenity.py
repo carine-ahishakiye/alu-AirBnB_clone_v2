@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+"""This module instantiates an object of class FileStorage"""
 import os
 
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
+if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    from models.engine.db_storage import DBStorage
 
+    storage = DBStorage()
+    storage.reload()
+else:
 
-class Amenity(BaseModel, Base):
-    """Amenities of a place"""
-    __tablename__ = 'amenities'
-    name = Column(String(128), nullable=False)
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        place_amenities = relationship('Place', secondary="place_amenity")
+    from models.engine.file_storage import FileStorage
+
+    storage = FileStorage()
+    storage.reload()
